@@ -5,7 +5,6 @@ const getProfile = async (req, res, next) => {
   try {
     const profile = await Profile.findOne({
       user: req.user.id,
-      useFindAndModify: false,
     }).populate("user", ["name", "avatar"]);
     if (!profile) {
       return res.status(400).json({ msg: "THERE IS NO PROFILE FOR THIS USER" });
@@ -16,6 +15,7 @@ const getProfile = async (req, res, next) => {
     res.status(500).send("SERVER ERROR");
   }
 };
+
 const profile = async (req, res, next) => {
   // destructure the request
   const {
@@ -111,8 +111,7 @@ const deleteProfile = async (req, res) => {
 const addExperience = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
-
-    profile.education.unshift(req.body);
+    profile.experience.unshift(req.body);
 
     await profile.save();
 
@@ -167,6 +166,7 @@ const deleteEducation = async (req, res) => {
     return res.status(500).json({ msg: "Server error" });
   }
 };
+
 module.exports = {
   getProfile,
   profile,
